@@ -1,10 +1,13 @@
 from flask import Flask, render_template
 from code_files.forms import EncryptForm
 from code_files.morse_coder import MorseCoder
+from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'povsekakiy_bogdanov'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///crypt_base.db"
+db = SQLAlchemy(app)
 
 
 @app.route('/', methods=["GET", "POST"])
