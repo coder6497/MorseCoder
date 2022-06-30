@@ -1,0 +1,22 @@
+{%extends "basic.html"%}
+
+{%block title%}
+    Шифрование
+{%endblock%}
+
+{%block body%}
+    <div class="container">
+        <h3>Раскодировать/закодировать сообщение</h3>
+        <form method="post" action="">
+            {{form.csrf_token()}}
+            {{form.word.label()}}<br>
+            {{form.word()}}<br>
+            {{form.select.label()}}<br>
+            {{form.select()}}<br>
+            <br>
+            {{form.submit()}}
+        </form>
+        <h4>Вывод:</h4>
+        <h2>{{n_word}}</h2>
+    </div>
+{%endblock%}

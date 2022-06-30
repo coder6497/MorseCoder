@@ -5,15 +5,6 @@
 {%endblock%}
 
 {%block body%}
-    <h2>Раскодировать/закодировать сообщение</h2>
-    <form method="post" action="">
-        {{form.csrf_token()}}
-        {{form.word.label()}}<br>
-        {{form.word()}}<br>
-        {{form.select.label()}}<br>
-        {{form.select()}}<br>
-        {{form.submit()}}
-    </form>
-    <h2>{{n_word}}</h2>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <a href="/encrypt"><button type="button" class="btn btn-secondary">Зашифровать/<br>расшифровать сообщение</button></a>
 {%endblock%}

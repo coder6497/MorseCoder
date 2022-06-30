@@ -1,0 +1,9 @@
+{%extends "basic.html"%}
+
+{% block title%}Словарь шрифтов{%endblock%}
+
+{%block body%}
+  {%for key, value in morse.items()%}
+    <h3>{{key}}:   {{value}}</h3>
+  {%endfor%}
+{%endblock%}
