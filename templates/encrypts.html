@@ -1,0 +1,10 @@
+{%extends "basic.html"%}
+
+{%block title%}Ваши шифры{%endblock%}
+
+{%block body%}
+  <h2>Ваши шифры:</h2>
+  {%for elem in user.encrypts%}
+    <h4>{{elem.first}} => {{elem.last}}</h4>
+  {%endfor%}
+{%endblock%}

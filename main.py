@@ -1,7 +1,7 @@
 import json
 from flask import Flask, render_template, redirect
 from flask_wtf import FlaskForm
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from wtforms import StringField, SubmitField, SelectField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, EqualTo
 from flask_sqlalchemy import SQLAlchemy
@@ -55,6 +55,9 @@ def encryptor():
             n_word = coder.to_morse()
         if form.select.data == "Раскодировать":
             n_word = coder.to_normal()
+        encrypt = Encrypts(first=form.word.data, last=n_word, user_id=current_user.id)
+        db.session.add(encrypt)
+        db.session.commit()
     return render_template("encryptor.html", form=form, n_word=n_word)
 
 
@@ -100,11 +103,17 @@ def registration():
     return render_template('registration.html', form=form)
 
 
+@app.route('/encrypts/')
+def encrypts():
+    return render_template('encrypts.html', user=current_user)
+
+
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String())
     email = db.Column(db.String())
     password_hash = db.Column(db.String())
+    encrypts = db.relationship('Encrypts')
 
     def __repr__(self):
         return f'<Users {self.id}r>'
@@ -114,6 +123,13 @@ class Users(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class Encrypts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first = db.Column(db.String())
+    last = db.Column(db.String())
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
 
 class EncryptForm(FlaskForm):

@@ -6,5 +6,8 @@
 
 {%block body%}
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <a href="/encrypt"><button type="button" class="btn btn-secondary">Зашифровать/<br>расшифровать сообщение</button></a>
+    <li>
+        <ol><a href="/encrypt"><button type="button" class="btn btn-secondary">Зашифровать/<br>расшифровать сообщение</button></a></ol>
+        <ol><a href="/encrypts"><button type="button" class="btn btn-secondary">Ваши шифры</button></a></ol>
+    </li>
 {%endblock%}
