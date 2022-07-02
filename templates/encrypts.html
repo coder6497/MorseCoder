@@ -5,6 +5,9 @@
 {%block body%}
   <h2>Ваши шифры:</h2>
   {%for elem in user.encrypts%}
-    <h4>{{elem.first}} => {{elem.last}}</h4>
+    <div class="alert alert-info">
+      <h4>{{elem.first}} => {{elem.last}}</h4>
+      <a href="/delete_encrypt/{{elem.id}}"><button type="button" class="btn btn-danger">Удалить</button></a>
+    </div>
   {%endfor%}
 {%endblock%}

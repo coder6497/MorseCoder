@@ -4,6 +4,8 @@
 
 {%block body%}
   {%for key, value in morse.items()%}
-    <h3>{{key}}:   {{value}}</h3>
+    <div class="alert alert-warning">
+      <h3>{{key}}:   {{value}}</h3>
+    </div>
   {%endfor%}
 {%endblock%}

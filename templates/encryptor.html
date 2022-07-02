@@ -7,16 +7,20 @@
 {%block body%}
     <div class="container">
         <h3>Раскодировать/закодировать сообщение</h3>
-        <form method="post" action="">
-            {{form.csrf_token()}}
-            {{form.word.label()}}<br>
-            {{form.word()}}<br>
-            {{form.select.label()}}<br>
-            {{form.select()}}<br>
-            <br>
-            {{form.submit()}}
-        </form>
+        <div class="alert alert-success">
+            <form method="post" action="">
+                {{form.csrf_token()}}
+                {{form.word.label()}}<br>
+                {{form.word(class="form-control")}}<br>
+                {{form.select.label()}}<br>
+                {{form.select(class="form-select")}}<br>
+                <br>
+                {{form.submit(class="btn btn-success")}}
+            </form>
+        </div>
         <h4>Вывод:</h4>
-        <h2>{{n_word}}</h2>
+        <div class="alert alert-secondary">
+            <h2>{{n_word}}</h2>
+        </div>
     </div>
 {%endblock%}

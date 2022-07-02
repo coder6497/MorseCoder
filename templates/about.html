@@ -1,0 +1,12 @@
+{%extends "basic.html"%}
+
+{%block title%}О вас{%endblock%}
+
+{%block body%}
+  <h2>О вас: {{user.username}}</h2>
+  <div class="alert alert-dark" role="alert">
+    {%for k, v in about.items()%}
+    <ul><li><font size="5">{{k}}:</font> {{v}}</li></ul>
+    {%endfor%}
+  </div>
+{%endblock%}

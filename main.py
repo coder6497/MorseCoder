@@ -2,7 +2,7 @@ import json
 from flask import Flask, render_template, redirect
 from flask_wtf import FlaskForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from wtforms import StringField, SubmitField, SelectField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, SelectField, PasswordField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, EqualTo
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -94,7 +94,7 @@ def logout():
 def registration():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = Users(username=form.username.data, email=form.email.data)
+        user = Users(username=form.username.data, email=form.email.data, phone=form.phone.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -104,14 +104,35 @@ def registration():
 
 
 @app.route('/encrypts/')
+@login_required
 def encrypts():
     return render_template('encrypts.html', user=current_user)
+
+
+@app.route('/delete_encrypt/<int:id>')
+@login_required
+def delete_encrypt(id):
+    encrypt = Encrypts.query.filter_by(id=id).first()
+    db.session.delete(encrypt)
+    db.session.commit()
+    return redirect('/encrypts')
+
+
+@app.route('/about_user')
+@login_required
+def about_user():
+    about = {}
+    about["Имя пользователя"] = current_user.username
+    about["Email"] = current_user.email
+    about["Номер телефона"] = current_user.phone
+    return render_template('about.html', user=current_user, about=about)
 
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String())
     email = db.Column(db.String())
+    phone = db.Column(db.String())
     password_hash = db.Column(db.String())
     encrypts = db.relationship('Encrypts')
 
@@ -149,6 +170,7 @@ class RegistrationForm(FlaskForm):
     username = StringField("Логин", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     password = PasswordField("Пароль", validators=[DataRequired()])
+    phone = StringField("Номер телефона", validators=[DataRequired()])
     repeat_password = PasswordField("Повторите пароль", validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("Зарегистрироваться")
 
