@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class MorseCoder:
+class MorseEncryptor:
     def __init__(self, user_input):
         with open("morse_code.json", "r", encoding="utf-8") as f:
             self.morse = json.load(f)
@@ -50,7 +50,7 @@ def encryptor():
     n_word = ''
     form = EncryptForm()
     if form.validate_on_submit():
-        coder = MorseCoder(form.word.data)
+        coder = MorseEncryptor(form.word.data)
         if form.select.data == "Закодировать":
             n_word = coder.to_morse()
         if form.select.data == "Раскодировать":
@@ -62,9 +62,8 @@ def encryptor():
 
 
 @app.route('/dict')
-@login_required
 def crypt_dict():
-    coder = MorseCoder('')
+    coder = MorseEncryptor('')
     return render_template('crypt.html', morse=coder.morse)
 
 
@@ -126,6 +125,11 @@ def about_user():
     about["Email"] = current_user.email
     about["Номер телефона"] = current_user.phone
     return render_template('about.html', user=current_user, about=about)
+
+
+@app.route('/about_app')
+def about_app():
+    return render_template('about_app.html')
 
 
 class Users(db.Model, UserMixin):
