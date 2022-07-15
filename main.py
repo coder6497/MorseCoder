@@ -2,7 +2,7 @@ import json
 from flask import Flask, render_template, redirect
 from flask_wtf import FlaskForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from wtforms import StringField, SubmitField, SelectField, PasswordField, BooleanField, IntegerField
+from wtforms import StringField, SubmitField, SelectField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, EqualTo
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,10 +13,11 @@ class MorseEncryptor:
         with open("morse_code.json", "r", encoding="utf-8") as f:
             self.morse = json.load(f)
         self.words = user_input.split(' ')
+        self.language = ''
         self.words_l = list(map(list, self.words))
 
     def to_morse(self):
-        for k, v in self.morse.items():
+        for k, v in self.morse[self.language].items():
             for i in range(len(self.words_l)):
                 for j in range(len(self.words_l[i])):
                     if self.words_l[i][j] == k or self.words_l[i][j] == k.lower():
@@ -24,7 +25,7 @@ class MorseEncryptor:
         return ' '.join(list(map(lambda x: ' '.join(x), self.words_l)))
 
     def to_normal(self):
-        for k, v in self.morse.items():
+        for k, v in self.morse[self.language].items():
             for i in range(len(self.words)):
                 if self.words[i] == v:
                     self.words[i] = k
@@ -51,6 +52,7 @@ def encryptor():
     form = EncryptForm()
     if form.validate_on_submit():
         coder = MorseEncryptor(form.word.data)
+        coder.language = form.language.data
         if form.select.data == "Закодировать":
             n_word = coder.to_morse()
         if form.select.data == "Раскодировать":
@@ -160,6 +162,7 @@ class Encrypts(db.Model):
 class EncryptForm(FlaskForm):
     word = StringField("Введите слово", validators=[DataRequired()])
     select = SelectField("Выберите режим", choices=['Закодировать', "Раскодировать"])
+    language = SelectField("Выберите язык", choices=["Русский", "English", "Цифры"])
     submit = SubmitField("Готово")
 
 
